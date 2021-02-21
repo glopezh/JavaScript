@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>TITLE</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="api-key" content="20s1aUx0SdTlDUwrri14uH0OmsKGYZRQHv7gMGsury7PW9qQ">
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <!-- Stylesheets -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body >
+    <header>
+        <div class="container-fluid position-relative no-side-padding">
+            <div class="menu-nav-icon" data-nav-menu="#main-menu"><i class="ion-navicon"></i></div>
+            <ul class="main-menu visible-on-click" id="main-menu">
+                <li><a href="#">INICIO</a></li>
+            </ul><!-- main-menu -->
+
+            <div class="src-area">
+                <form id="src-form">
+                    <input class="src-input" type="text" placeholder="Keywords">
+                    <button class="src-btn" type="submit" onclick="filtrarTexto()">Buscar</button>
+                </form>
+            </div>
+
+        </div><!-- container -->
+    </header>
+    <section>
+        <div id="languages" class="mt-1 container d-flex justify-content-center btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-outline-primary" onclick="filtrarIdioma('it')">it</button>
+            <button type="button" class="btn btn-outline-primary" onclick="filtrarIdioma('ar')">ar</button>
+            <button type="button" class="btn btn-outline-primary" onclick="filtrarIdioma('nl')">nl</button>
+            <button type="button" class="btn btn-outline-primary" onclick="filtrarIdioma('es')">es</button>
+        </div>
+    </section>
+    <section class="blog-area section">
+        <div class="container" id="top-news">
+            <h2 id="title-news">Top noticias</h2>
+            <hr>
+            <div id="news-container">
+                <p>No hay resultados</p>
+            </div>
+            <hr>
+        </div><!-- container -->
+    </section><!-- section -->
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script id="new-template" type="text/x-handlebars-template">
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100">
+                <div class="single-post post-style-2 post-style-3">
+                    <div class="blog-info">
+                        <h6 class="pre-title"><a href="#"><b>{{ author }}</b></a></h6>
+                        <h4 class="title">
+                            <a href="#">
+                                <b>{{ title }}</b>
+                            </a>
+                        </h4>
+                        <div class="post-footer">
+                            <span><p>Published: {{ published }}</p></span>
+                            <span><p>Country: {{ language }}</p></span>
+                        </div>
+                    </div><!-- blog-info -->
+                </div><!-- single-post -->
+            </div><!-- card -->
+        </div><!-- col-lg-4 col-md-6 -->
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var token = document.querySelector('meta[name="api-key"]').content;
+            var url = 'https://api.currentsapi.services/v1/latest-news?' +
+                'apiKey='+token;
+            var req = new Request(url);
+            fetch(req)
+                .then(function (response) {
+                    //document.getElementById('news-container').innerHTML = response.json();
+                    if (response.ok) {
+                        response.json().then(data => {
+                            console.log(data.news);
+                            var contenido = '<div class="row">';
+                            for(var i=1; i<= 6; i++){
+                                 contenido += template(
+                                    {
+                                        author: data.news[i-1].author,
+                                        title: data.news[i-1].title,
+                                        published: data.news[i-1].published.toString(),
+                                        language: data.news[i-1].language
+                                    }
+                                );
+                                 if(i%3 == 0){
+                                     contenido += '</div><div class="row">';
+                                 }
+                            }
+                            contenido += '</div>';
+                            document.getElementById('news-container').innerHTML = contenido;
+                        });
+                    } else {
+                        alert("No se ha encontrado ninguna noticia");
+                        console.log('Respuesta de red OK pero respuesta HTTP no OK');
+                    }
+                })
+        });
+
+        const templateCode = document.getElementById('new-template').innerHTML;
+        var template = Handlebars.compile(templateCode);
+
+        function filtrarIdioma(idioma){
+            var token = document.querySelector('meta[name="api-key"]').content;
+            var url = 'https://api.currentsapi.services/v1/latest-news?' +
+                'language='+idioma+'&' +
+                'apiKey='+token;
+            var req = new Request(url);
+            fetch(req)
+                .then(function (response) {
+                    //document.getElementById('news-container').innerHTML = response.json();
+                    if (response.ok) {
+                        response.json().then(data => {
+                            console.log(data.news);
+                            var contenido = '<div class="row">';
+                            for(var i=1; i<= 6; i++){
+                                contenido += template(
+                                    {
+                                        author: data.news[i-1].author,
+                                        title: data.news[i-1].title,
+                                        published: data.news[i-1].published.toString(),
+                                        language: data.news[i-1].language
+                                    }
+                                );
+                                if(i%3 == 0){
+                                    contenido += '</div><div class="row">';
+                                }
+                            }
+                            contenido += '</div>';
+                            document.getElementById('news-container').innerHTML = contenido;
+                            document.getElementById('title-news').innerText = 'Top noticias en ' + idioma;
+                        });
+                    } else {
+                        alert("No se ha encontrado ninguna noticia");
+                        console.log('Respuesta de red OK pero respuesta HTTP no OK');
+                    }
+                })
+        }
+
+        const form = document.getElementById('src-form');
+        const input = form.querySelector('[type="text"]');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var token = document.querySelector('meta[name="api-key"]').content;
+            var url = 'https://api.currentsapi.services/v1/search?' +
+                'keyword='+ input.value + '&' +
+                'apiKey='+token;
+            var req = new Request(url);
+            fetch(req)
+                .then(function (response) {
+                    //document.getElementById('news-container').innerHTML = response.json();
+                    if (response.ok) {
+                        response.json().then(data => {
+                            console.log(data.news);
+                            var contenido = '<div class="row">';
+                            for(var i=1; i<= data.news.length; i++){
+                                contenido += template(
+                                    {
+                                        author: data.news[i-1].author,
+                                        title: data.news[i-1].title,
+                                        published: data.news[i-1].published.toString(),
+                                        language: data.news[i-1].language
+                                    }
+                                );
+                                if(i%3 == 0){
+                                    contenido += '</div><div class="row">';
+                                }
+                            }
+                            contenido += '</div>';
+                            document.getElementById('news-container').innerHTML = contenido;
+                            document.getElementById('title-news').innerText = 'Resultados';
+                        });
+                    } else {
+                        alert("No se ha encontrado ninguna noticia");
+                        console.log('Respuesta de red OK pero respuesta HTTP no OK');
+                    }
+                })
+        });
+    </script>
+</body>
+</html>

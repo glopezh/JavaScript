@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/prism.css">
+  </head>
+  <body>
+    <article class="markdown-body">
+<h1 id="pr-ctica-de-aplicaciones-web">Práctica de aplicaciones Web</h1>
+<p>La práctica consiste en la implementación de un buscador de noticias a través de la API pública de currentsapi.</p>
+<p>Los archivos necesarios para realizar la práctica están en el archivo <a href="">app.zip</a>. El archivo que se utilizará para probar la práctica está en app/index.html.</p>
+<h2 id="funcionalidad">Funcionalidad</h2>
+<p>Al abrir la pagina index.html se debe ver en la sección "Top noticias" las primeras 6 noticias</p>
+<pre><code class="lang-bash">Top noticias: https://api.currentsapi.services/v1/latest-news?apiKey=API_KEY
+</code></pre>
+
+<p>Encima de esta sección aparecen unos botones con todos los idiomas disponibles en la API</p>
+<pre><code class="lang-bash">Languages: https://api.currentsapi.services/v1/available/languages?apiKey=API_KEY
+</code></pre>
+
+<p>Al pulsar intro sobre el campo de búsqueda, se debe realizar la búsqueda en la API de currentsapi usando los términos introducidos.</p>
+<pre><code class="lang-bash">Busqueda: https://api.currentsapi.services/v1/search?keywords=terminos de busqueda&apiKey=API_KEY
+</code></pre>
+
+<p>Cuando se reciben los resultados se deben reemplazar en el listado "Top Noticias" con el mismo formato que en el ejemplo de top noticias cambiando el titulo por "Resultados".
+<p>Cuando se haga click en uno de los idiomas, se mostraran el top noticias para ese idioma con el mismo formato que en el ejemplo de top noticias
+cambiando el titulo por "Top noticias en {idioma}". Tanto en la barra de botones como en el idioma dentro de cada noticia</p>
+<pre><code class="lang-bash">Top noticias idioma: https://api.currentsapi.services/v1/latest-news?language=es&apiKey=API_KEY
+</code></pre>
+
+<p>Cuando se haga un click en el titulo de la noticia se debe abrir la web de la noticia.</p>
+<p>En caso de error accediendo a la API, debe mostrarse una alerta con un mensaje al usuario.</p>
+<p>La página debe volver al formato inicial cuando se haga click en el botón "INICIO" en menu o se haga una recarga de la pagina, mostrando la sección "Top noticias".</p>
+<h2 id="api">API</h2>
+<p>Los datos utilizados por la aplicación deben obtenerse de la <a href="https://currentsapi.services/en/docs/endpoint">API Web de currentsapi</a>.</p>
+<p>Para acceder a la API, se debe registrar y utilizar el api key obtenido.</p>
+<p>Y ponerlo como contenido <code>&lt;meta name=&quot;api-token&quot;&gt;</code> que hay en el HTML. El código JavaScript debe coger el token de este elemento HTML al cargar la página.</p>
+<p>Después, para obtener los datos necesarios se debe realizar una llamada al endpoint de búsqueda de la API (enviando el token como parámetro de la url "apiKey"): <code>https://api.currentsapi.services/v1/search?keywords=terminos de busqueda&apiKey=API_KEY&gt;</code></p>
+<p>Estas llamadas deben implementarse en el código JavaScript utilizando el método <code>Fetch</code>.</p>
+<h2 id="restricciones">Restricciones</h2>
+<p>Todo el código JavaScript debe ser escrito por el alumno. Se deben crear tantos archivos como sea necesario para mantener
+el código lo más estructurado posible.</p>
+<p>El archivo HTML sólo puede modificarse para eliminar el código de ejemplo, añadir identificadores para poder referenciar el código fácilmente desde JS y, opcionalmente, para añadir las plantillas realizadas a partir del código de ejemplo.</p>
+<h2 id="evaluaci-n">Evaluación</h2>
+<p>La práctica representa un 30% de la nota de la asignatura.</p>
+<p>Si la nota del entregable es menos de 3, el alumno debería recuperar al final de curso.</p>
+<p>Se valorará tanto la parte funcional como la parte técnica, incluyendo la organización y la limpieza del código entregado.</p>
+<h2 id="entrega">Entrega</h2>
+<p>Deberá entregarse la carpeta &quot;app&quot; con los añadidos del alumno, comprimida en formato zip o rar, antes del 21/02/2021 a las 23:59.</p>
+
+    </article>
+    <script src="assets/js/prism.js"></script>
+  </body>
+</html>
